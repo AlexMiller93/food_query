@@ -20,3 +20,22 @@ class FoodListSerializer(serializers.ModelSerializer):
     class Meta:
         model = FoodCategory
         fields = ('id', 'name_ru', 'name_en', 'name_ch', 'order_id', 'foods')
+
+class PublishedFoodListSerializer(serializers.ListSerializer):
+    child = FoodSerializer()
+
+    def to_representation(self, data):
+        data = data.filter(is_publish=True)
+        return super().to_representation(data)
+
+
+class PublishedFoodSerializer(FoodSerializer):
+    additional = serializers.SlugRelatedField(
+        many=True, read_only=True, slug_field='internal_code')
+
+    class Meta(FoodSerializer.Meta):
+        list_serializer_class = PublishedFoodListSerializer
+        
+
+class FoodCategorySerializer(FoodListSerializer):
+    foods = PublishedFoodSerializer(source='food', many=True, read_only=True)

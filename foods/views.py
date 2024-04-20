@@ -1,6 +1,7 @@
+from django.db.models import Count
 from rest_framework import generics, viewsets
 from foods.models import Food, FoodCategory
-from foods.serializers import FoodListSerializer
+from foods.serializers import FoodListSerializer, FoodCategorySerializer
 
 # Create your views here.
 
@@ -20,29 +21,17 @@ from foods.serializers import FoodListSerializer
 
 """
 
-class AllPublishedFoodsViewSet(viewsets.ReadOnlyModelViewSet):
-    """ """
-    serializer_class = FoodListSerializer
-
-    def get_queryset(self):
-        
-        # все разделы меню
-        cats = FoodCategory.objects.all()
-        
-        #? разделы меню где есть блюда -> блюда (is_publish=True)
-        if FoodCategory.objects.exists():
-            pass
-        
-        # опубликованные блюда 
-        public_foods=cats.food.filter(is_publish=True)
-        
-        
-        return public_foods
-
 
 class FoodsAPIListViewSet(generics.ListAPIView):
     """ """
-    serializer_class = FoodListSerializer
+    serializer_class = FoodCategorySerializer
 
     def get_queryset(self):
-        return Food.objects.filter(is_publish=True)
+        active_foods = Food.objects \
+            .filter(is_publish=True) \
+            .values('category') \
+            .annotate(count=Count('category')) \
+            .order_by()
+        allowed_ids = [item['category'] for item in active_foods]
+        categories = FoodCategory.objects.filter(id__in=allowed_ids)
+        return categories

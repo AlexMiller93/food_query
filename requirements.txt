@@ -1,3 +1,4 @@
-django=4.2
+django==4.2
 djangorestframework
-django-timestampedmodel
+django_extensions
+python_dotenv
