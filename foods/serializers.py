@@ -22,6 +22,8 @@ class FoodListSerializer(serializers.ModelSerializer):
         fields = ('id', 'name_ru', 'name_en', 'name_ch', 'order_id', 'foods')
 
 class PublishedFoodListSerializer(serializers.ListSerializer):
+    """ Сериализатор для фильтрации блюд, у которых`is_publish=True` """
+    
     child = FoodSerializer()
 
     def to_representation(self, data):
@@ -30,6 +32,9 @@ class PublishedFoodListSerializer(serializers.ListSerializer):
 
 
 class PublishedFoodSerializer(FoodSerializer):
+    """ Сериализатор наследуется от FoodSerializer, 
+    использует  PublishedFoodListSerializer как list_serializer_class  """
+    
     additional = serializers.SlugRelatedField(
         many=True, read_only=True, slug_field='internal_code')
 
@@ -38,4 +43,7 @@ class PublishedFoodSerializer(FoodSerializer):
         
 
 class FoodCategorySerializer(FoodListSerializer):
+    """ Сериализатор наследуется от FoodListSerializer, 
+    использует  PublishedFoodSerializer для вывода блюд,у которых`is_publish=True`"""
+    
     foods = PublishedFoodSerializer(source='food', many=True, read_only=True)
