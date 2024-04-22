@@ -23,7 +23,7 @@ class FoodListSerializer(serializers.ModelSerializer):
 
 
 class PublishedFoodListSerializer(serializers.ListSerializer):
-    """ Сериализатор для фильтрации блюд, у которых`is_publish=True` """
+    """ Сериализатор для фильтрации блюд, у которых `is_publish=True` """
     
     child = FoodSerializer()
 

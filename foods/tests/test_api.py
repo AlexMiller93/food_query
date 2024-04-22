@@ -9,7 +9,7 @@ from foods.serializers import (
     PublishedFoodSerializer)
 from foods.models import Food, FoodCategory
 
-class FoodApiTestCase(APITestCase):
+class FoodApiListTestCase(APITestCase):
     def test_get_published_foods(self):
         cat1 = FoodCategory.objects.create(
             name_ru='Test category 1')
@@ -36,7 +36,7 @@ class FoodApiTestCase(APITestCase):
         
         response = self.client.get(url)
         # serializer_data = FoodCategorySerializer(food_1).data
-        serializer_data = PublishedFoodListSerializer([food_1, food_2], many=True).data
+        serializer_data = FoodCategorySerializer([food_1, food_2], many=True).data
         print(serializer_data)
         print('\n')
         print(response.data)

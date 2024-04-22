@@ -8,11 +8,6 @@ class FoodsTest(TestCase):
     @classmethod
     def setUpClass(self):
         super().setUpClass()
-        self.user = User.objects.create_user(username='auth')
-    
-    @classmethod
-    def setUpClass(self):
-        super().setUpClass()
         self.cat1 = FoodCategory.objects.create(
             name_ru='Test category 1')
         self.cat2 = FoodCategory.objects.create(
