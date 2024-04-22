@@ -45,6 +45,6 @@ class PublishedFoodSerializer(FoodSerializer):
 
 class FoodCategorySerializer(FoodListSerializer):
     """ Сериализатор наследуется от FoodListSerializer, 
-    использует  PublishedFoodSerializer для вывода блюд,у которых`is_publish=True`"""
+    использует  PublishedFoodSerializer для вывода блюд, у которых`is_publish=True`"""
     
     foods = PublishedFoodSerializer(source='food', many=True, read_only=True)
