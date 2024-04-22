@@ -21,6 +21,7 @@ class FoodListSerializer(serializers.ModelSerializer):
         model = FoodCategory
         fields = ('id', 'name_ru', 'name_en', 'name_ch', 'order_id', 'foods')
 
+
 class PublishedFoodListSerializer(serializers.ListSerializer):
     """ Сериализатор для фильтрации блюд, у которых`is_publish=True` """
     
