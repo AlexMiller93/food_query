@@ -23,8 +23,9 @@ class FoodListSerializer(serializers.ModelSerializer):
 
 
 class PublishedFoodListSerializer(serializers.ListSerializer):
-    """ Сериализатор для фильтрации блюд, у которых `is_publish=True` """
-    
+    """ Сериализатор списка блюд, фильтрует данные,
+        оставляя только блюда с is_publish == True"""
+
     child = FoodSerializer()
 
     def to_representation(self, data):
@@ -33,18 +34,19 @@ class PublishedFoodListSerializer(serializers.ListSerializer):
 
 
 class PublishedFoodSerializer(FoodSerializer):
-    """ Сериализатор наследуется от FoodSerializer, 
-    использует  PublishedFoodListSerializer как list_serializer_class  """
-    
-    additional = serializers.SlugRelatedField(
-        many=True, read_only=True, slug_field='internal_code')
+    """
+        Сериализатор расширяет  функциональность FoodSerializer,
+        указывая  PublishedFoodListSerializer
+        как сериализатор множества объектов 
+    """
 
     class Meta(FoodSerializer.Meta):
         list_serializer_class = PublishedFoodListSerializer
-        
+
 
 class FoodCategorySerializer(FoodListSerializer):
-    """ Сериализатор наследуется от FoodListSerializer, 
-    использует  PublishedFoodSerializer для вывода блюд, у которых`is_publish=True`"""
-    
+    """ Сериализатор расширяет функциональность FoodListSerializer,
+    используя  PublishedFoodSerializer для вывода блюд,
+    что обеспечивает фильтрацию по признаку is_publish == True """
+
     foods = PublishedFoodSerializer(source='food', many=True, read_only=True)
